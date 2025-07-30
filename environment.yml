@@ -1,0 +1,22 @@
+name: amats_cap_equity
+
+channels:
+  - conda-forge
+  - anaconda
+
+dependencies:
+- pandas
+- geopandas
+- numpy
+- yaml
+- pyyaml
+- openpyxl
+
+- pip
+- pip:
+  - census
+  - us
+  - sodapy # socrate open data api for cdc places support
+  - -e ../../packages/rputils
+  - -e ../../packages/algi
+    

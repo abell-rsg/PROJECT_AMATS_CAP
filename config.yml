@@ -1,0 +1,226 @@
+
+
+data_dir: C:\Users\alex.bell\OneDrive - Resource Systems Group, Inc\Projects - Documents\AK\240275_AMATS CAP
+gis_folder: 9.GIS
+
+census_api: 2815a70fb69898f48df9b9da7cec697dd38bc18c ###!!!! find a better way to provide this
+acs_specs:
+  var_url: https://api.census.gov/data/{}/acs/{}/variables.html
+  year: 2023
+  product: acs5 # 5-year data profiles
+  sfips: '02'
+  cfips: '020'
+
+cdc_specs:
+  # url: https://data.cdc.gov/500-Cities-Places/PLACES-Local-Data-for-Better-Health-Census-Tract-D/cwsq-ngmh/about_data
+  data: cwsq-ngmh # This is the tract-level data published in 2024
+  stateabbr: AK
+  countyname: Anchorage
+  variables:
+    Health Outcomes:
+      - Arthritis among adults
+      - Obesity among adults
+      - Stroke among adults
+      - Diagnosed diabetes among adults
+      - Depression among adults
+      - Current asthma among adults
+      - High blood pressure among adults
+      - All teeth lost among adults aged >=65 years
+      - Coronary heart disease among adults
+      - High cholesterol among adults who have ever been screened
+      - Chronic obstructive pulmonary disease among adults
+      - Cancer (non-skin) or melanoma among adults
+    Disability:
+      - Vision disability among adults
+      - Any disability among adults
+      - Self-care disability among adults
+      - Mobility disability among adults
+      - Hearing disability among adults
+      - Independent living disability among adults
+      - Cognitive disability among adults
+    Prevention:
+      - Visits to doctor for routine checkup within the past year among adults
+      - Mammography use among women aged 50-74 years
+      - Colorectal cancer screening among adults aged 45-75 years
+      - Current lack of health insurance among adults aged 18-64 years
+      - Visited dentist or dental clinic in the past year among adults
+      - Taking medicine to control high blood pressure among adults with high blood pressure
+      - Cholesterol screening among adults
+    Health Status:
+      - Frequent mental distress among adults
+      - Frequent physical distress among adults
+      - Fair or poor self-rated health status among adults
+    Health-Related Social Needs:
+      - Received food stamps in the past 12 months among adults
+      - Food insecurity in the past 12 months among adults
+      - Utility services shut-off threat in the past 12 months among adults
+      - Feeling socially isolated among adults
+      - Lack of social and emotional support among adults
+      - Lack of reliable transportation in the past 12 months among adults
+      - Housing insecurity in the past 12 months among adults
+    Health Risk Behaviors: 
+      - Current cigarette smoking among adults
+      - Short sleep duration among adults
+      - Binge drinking among adults
+      - No leisure-time physical activity among adults
+
+Data:
+  ACS:
+    POP Total population: B01001_001E
+    POP White population: B01001A_001E
+    INCOME Total: B05010_001E
+    INCOME Under FPL: B05010_002E
+    INCOME Over 2XFPL: B05010_018E
+    AGE Pop under 18:
+      - B01001_003E # Male < 5
+      - B01001_004E # Male 5 to 9
+      - B01001_005E # Male 10 to 14
+      - B01001_006E # Male 15 to 17
+      - B01001_027E # Female < 5
+      - B01001_028E # Female 5 to 9
+      - B01001_029E # Female 10 to 14
+      - B01001_030E # Female 15 to 17
+    AGE Pop over 65:
+      - B01001_020E # Male 65 and 66
+      - B01001_021E # Male 67 to 69
+      - B01001_022E # Male 70 to 74
+      - B01001_023E # Male 75 to 79
+      - B01001_024E # Male 80 to 84
+      - B01001_025E # Male 85 and up
+      - B01001_044E # Female 65 and 66
+      - B01001_045E # Female 67 to 69
+      - B01001_046E # Female 70 to 74
+      - B01001_047E # Female 75 to 79
+      - B01001_048E # Female 80 to 84
+      - B01001_049E # Female 85 and up
+    ISO Total: B16002_001E
+    ISO Limted English:
+      - B16002_004E # Spanish
+      - B16002_007E # French, Haitian, Creole
+      - B16002_010E # German / Germanic
+      - B16002_013E # Russian, Polish, Slavic
+      - B16002_016E # Other Indo-European
+      - B16002_019E # Korean
+      - B16002_022E # Chinese
+      - B16002_025E # Vietnamese
+      - B16002_028E # Tagalog
+      - B16002_031E # Other Asian/Pac. Island
+      - B16002_034E # Arabic
+      - B16002_037E # Other/unspecified
+    ED Pop Over 25: B16010_001E # Total pop 25 +
+    ED Less than HS: B16010_002E
+    ED HS or equiv: B16010_015E
+    ED Some college or AD: B16010_028E
+    ED Bach or higher: B16010_041E
+    TENURE Total: B25003_001E
+    TENURE Owner occ: B25003_002E
+    TENURE Renter occ: B25003_003E
+    UNITS Total: B25024_001E
+    UNITS Mobile home: B25024_010E
+    UNITS RV or veh: B25024_011E
+    BURDEN Rent total: B25070_001E
+    BURDEN Rent U30PCT:
+      - B25070_002E # < 10%
+      - B25070_003E # 10 to 14.9%
+      - B25070_004E # 15 to 19.9%
+      - B25070_005E # 20 to 24.9%
+      - B25070_006E # 25 to 29.9%
+    BURDEN Rent O50PCT: B25070_010E # 50% or more
+    BURDEN Own total: B25091_001E
+    BURDEN Own with mortgage: B25091_002E
+    BURDEN Own U30PCT:
+      - B25091_002E # No mortgage | Comment out if limiting analysis to mortgagees
+      - B25091_003E # < 10%
+      - B25091_004E # 10 to 14.9%
+      - B25091_005E # 15 to 19.9%
+      - B25091_006E # 20 to 24.9%
+      - B25091_007E # 25 to 29.9%
+    BURDEN Own O50PCT: B25091_011E # 50% or more
+    VEH Total: B08201_001E
+    VEH No vehicle: B08201_002E
+    VEH One vehicle: B08201_003E
+  
+  CDC:
+    Asthma: Current asthma among adults
+    Heart disease: Coronary heart disease among adults
+    Diabetes: Diagnosed diabetes among adults
+    Mental health burden: Frequent mental distress among adults
+    Lack of physical activity: No leisure-time physical activity among adults
+    Disability: Any disability among adults
+
+Domains:
+  1: Social and Demographic Vulnerability
+  2: Housing and Displacement Risk
+  3: Health Vulnerability
+  4: Climate Exposure and Environmental Hazards
+  5: Infrastructure and Mobility Resilience
+  6: Green Space and Ecological Buffers
+
+Indicators:
+  Non-white population:
+    method: percent
+    args: 
+      - POP Total population
+      - POP White population
+      - complement # 1 - result of prev args
+  Low-income households: # Percent U2XFPL
+    method: percent
+    args:
+      - INCOME Total
+      - INCOME Over 2XFPL
+      - complement
+  Youth:
+    method: percent
+    args:
+      - POP Total population
+      - AGE Pop under 18
+  Elderly:
+    method: percent
+    args:
+      - POP Total population
+      - AGE Pop over 65
+  Limited English proficiency:
+    method: percent
+    args:
+      - ISO Total
+      - ISO Limted English
+  No high school diploma:
+    method: percent
+    args:
+      - ED Pop Over 25
+      - ED Less than HS
+  Pct renters:
+    method: percent
+    args:
+      - TENURE Total
+      - TENURE Renter occ
+  Pct rent burdened:
+    method: percent
+    args:
+      - BURDEN Rent total
+      - BURDEN Rent U30PCT
+      - complement
+  Pct mortgage burdened:
+    method: percent
+    args:
+      - BURDEN Own total
+      - BURDEN Own U30PCT
+      - complement
+  Pct in mobile homes:
+    method: percent
+    args:
+      - UNITS Total
+      - UNITS Mobile home
+  Asthma:
+    method: None
+  Heart disease:
+    method: None
+  Diabetes:
+    method: None
+  Mental health burden:
+    method: None
+  Lack of physical activity:
+    method: None
+  Disability:
+    method: None
+

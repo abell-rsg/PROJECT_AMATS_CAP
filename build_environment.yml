@@ -1,0 +1,29 @@
+channels:
+- conda-forge
+- anaconda
+dependencies:
+- pandas
+- geopandas
+- numpy
+- yaml
+- pyyaml
+- openpyxl
+- pip
+- conda-forge::pysal
+- conda-forge::pyogrio
+- python-dotenv
+- statsmodels
+- xlrd=1.2
+- appdirs
+- mkl-service
+- tqdm
+- pip:
+  - census
+  - us
+  - sodapy
+  - -e ../../packages/rputils
+  - -e ../../packages/algi
+  - censusdata
+  - shareplum
+  - pandasql
+name: amats_cap_equity
