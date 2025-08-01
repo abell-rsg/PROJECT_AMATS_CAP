@@ -13,16 +13,19 @@ dependencies:
 - conda-forge::pyogrio
 - python-dotenv
 - statsmodels
+- fiona
 - xlrd=1.2
 - appdirs
 - mkl-service
 - tqdm
+- conda-forge::copulae
 - pip:
   - census
   - us
   - sodapy
   - -e ../../packages/rputils
   - -e ../../packages/algi
+  - -e ../../packages/thomas
   - censusdata
   - shareplum
   - pandasql

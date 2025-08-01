@@ -1,14 +1,19 @@
 from census import Census
 from sodapy import Socrata
+import pygris
 import pandas as pd
 import yaml
 from six import string_types
+from pathlib import Path
 
 
 # %% GLOBALS
 config_yml = r"projects\PROJECT_AMATS_CAP\config.yml"
 with open(config_yml) as stream:
     CONFIG = yaml.safe_load(stream)
+NORM_MIN = 0.0
+NORM_MAX = 100.0
+OUT_DIR = Path(CONFIG["data_dir"], CONFIG["gis_folder"], "EquityIndices")
 
 #%% HELPER FUNCTIONS
 def pull_acs(
@@ -73,7 +78,7 @@ def pull_cdc(
                 columns=_group_cols,
                 aggfunc="first",
             )
-            var_dfs.append(piv_df)
+            var_dfs.append(piv_df.astype(float))
         var_df = pd.concat(var_dfs, axis=1)
         # TODO: the sum is naive here but fine if there's only one column
         # used to represent `var`. Add support for more robuse combos of
@@ -87,13 +92,6 @@ def pull_cdc(
     return combo_df
 
 
-def percent(df, denom, numer, complement=False):
-    # TODO: any divide by zero warning? 
-    pct = df[numer] / df[denom]
-    if complement:
-        pct = 1 - pct
-    return pct * 100
-
 if __name__ == "__main__":
     # Census connect
     c = Census(CONFIG["census_api"])
@@ -105,6 +103,12 @@ if __name__ == "__main__":
     cvar_dir = acs_specs["var_url"].format(cyear, cprod)
     # c_var_lookup = pd.read_html(cvar_dir)[0]
 
+    # pull census geo
+    geo_callable = getattr(pygris, CONFIG["geo_scale"])
+    geos = geo_callable(state=cstate, county=ccty)
+    out_file = Path(OUT_DIR, "AMATS_census_tracts.shp")
+    geos.to_file(out_file)
+
     # pull census data
     acs_df = pull_acs(
         conn=c,
@@ -115,6 +119,8 @@ if __name__ == "__main__":
         county_fips=ccty,
         tract=Census.ALL,
     )
+    out_file = Path(OUT_DIR, "AMATS_ACS.pkl")
+    acs_df.to_pickle(out_file)
 
     # CDC connect
     client=Socrata("data.cdc.gov", None)
@@ -129,40 +135,11 @@ if __name__ == "__main__":
         keep_raw=True,
         **cdc_specs
     )
-
-    # Merge tables
-    cdc_for_merge = cdc_df.copy()
-    drop_indices = [k for k in cdc_specs.keys()]
-    drop_indices.append("year")
-    cdc_for_merge.index = cdc_for_merge.index.droplevel(drop_indices)
-    keep_cols = [k for k in cdc_dict.keys()]
-    cdc_for_merge = cdc_for_merge[keep_cols].copy()
-    cdc_for_merge.columns = keep_cols
-    merge_df = acs_df.join(cdc_for_merge)
-
-    # Estimate indicators (combos of variables)
-    clean_cols = []
-    for iname, ispecs in CONFIG["Indicators"].items():
-        clean_cols.append(iname)
-        imethod = ispecs.pop("method")
-        if imethod == "None":
-            continue
-        callable = globals()[imethod]
-        iargs = ispecs["args"]
-        if "complement" in iargs:
-            ikwargs = {"complement": True}
-            iargs.pop(-1)
-        else:
-            ikwargs = {"complement": False}
-        merge_df[iname] = callable(merge_df, *iargs, **ikwargs)
-    
-    index_src = merge_df[clean_cols].copy()
-
-    # Estimate indices
-
-
+    out_file = Path(OUT_DIR, "AMATS_CDC.pkl")
+    cdc_df.to_pickle(out_file)
 
     
+        
 
 
 

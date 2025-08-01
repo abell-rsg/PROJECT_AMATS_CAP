@@ -17,6 +17,8 @@ dependencies:
   - census
   - us
   - sodapy # socrate open data api for cdc places support
+  - pygris # tiger spatial data
   - -e ../../packages/rputils
   - -e ../../packages/algi
+  - -e ../../packages/thomas
     

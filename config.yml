@@ -2,6 +2,9 @@
 
 data_dir: C:\Users\alex.bell\OneDrive - Resource Systems Group, Inc\Projects - Documents\AK\240275_AMATS CAP
 gis_folder: 9.GIS
+geo_scale: tracts
+
+crs: EPSG:102634 #NAD83 SP AK 4 (US Feet)
 
 census_api: 2815a70fb69898f48df9b9da7cec697dd38bc18c ###!!!! find a better way to provide this
 acs_specs:
@@ -129,7 +132,7 @@ Data:
     BURDEN Own total: B25091_001E
     BURDEN Own with mortgage: B25091_002E
     BURDEN Own U30PCT:
-      - B25091_002E # No mortgage | Comment out if limiting analysis to mortgagees
+      # - B25091_002E # No mortgage | Comment out if limiting analysis to mortgagees
       - B25091_003E # < 10%
       - B25091_004E # 10 to 14.9%
       - B25091_005E # 15 to 19.9%
@@ -157,6 +160,12 @@ Domains:
   6: Green Space and Ecological Buffers
 
 Indicators:
+  Pop density scaled:
+    method: density
+    args:
+      - ALAND
+      - POP Total population
+    normalize: 100
   Non-white population:
     method: percent
     args: 
@@ -211,6 +220,11 @@ Indicators:
     args:
       - UNITS Total
       - UNITS Mobile home
+  Zero cars:
+    method: percent
+    args:
+      - VEH Total
+      - VEH No vehicle
   Asthma:
     method: None
   Heart disease:
@@ -223,4 +237,54 @@ Indicators:
     method: None
   Disability:
     method: None
+
+Indices:
+  SVI:
+    Choose: 3
+    Indicators:
+    - Pop density scaled*
+    - Non-white population
+    - Low-income households
+    - Youth
+    - Elderly
+    - Limited English proficiency
+    - Disability
+    - No high school diploma
+    - Pct renters
+    - Pct rent burdened
+    - Pct mortgage burdened
+    - Pct in mobile homes
+    - Zero cars
+  HBI:
+    Choose: 3
+    Indicators:
+    - Asthma
+    - Heart disease
+    - Diabetes
+    - Mental health burden
+    - Lack of physical activity
+  # BRI:
+  #   Indicators:
+  #   - Low access to transit
+  #   - Low access to essential destinations
+  #   - Low access to parks
+  #   - Zero vehicle
+  #   - Low walkability
+  #   - Low bikeability
+  #   - Distance to crisis destinations
+  #   - Grid vulnerability
+  #   - Low tree canopy
+  #   - Impervious surface
+  # CEI:
+  #   Indicators:
+  #   - Wildfire
+  #   - Proximity to wildfire prone zones
+  #   - Floodplain 100 year
+  #   - Stormwater Infrastructure density
+  #   - Proximity to hazardous facilities
+  #     - substations
+  #     - oil tanks
+  #   - Wind Exposure
+  #   - Landslide risk
+
 
